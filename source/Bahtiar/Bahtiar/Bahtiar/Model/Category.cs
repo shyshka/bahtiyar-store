@@ -1,9 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows;
-using System.Xml;
-using Bahtiar.Annotations;
-
+﻿
 namespace Bahtiar.Model
 {
     public class Category : EntityBase
@@ -14,7 +9,7 @@ namespace Bahtiar.Model
             get { return _id; }
             set
             {
-                if (_id != value)
+                if (_id == value)
                     return;
                 _id = value;
                 OnPropertyChanged();
@@ -27,7 +22,7 @@ namespace Bahtiar.Model
             get { return _name; }
             set
             {
-                if (_name != value)
+                if (_name == value)
                     return;
                 _name = value;
                 OnPropertyChanged();
