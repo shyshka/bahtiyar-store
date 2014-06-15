@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Text;
 using System.Xml;
 using Bahtiar.Model;
 
@@ -11,18 +10,28 @@ namespace Bahtiar.ViewModel
     {
         public CategoryGroup Categories { get; private set; }
         private Category _currentCategory;
-
         public Category CurrentCategory
         {
             get { return _currentCategory; }
             set
             {
                 _currentCategory = value;
-                if (!_currentCategory.IsBrandsLoaded)
+
+                if (_currentCategory != null && !_currentCategory.IsBrandsLoaded)
                     _currentCategory.LoadBrands();
                 OnPropertyChanged();
             }
         }
+
+        private RelayCommand _refreshCommand;
+
+        public RelayCommand RefreshCommmand
+        {
+            get { return _refreshCommand ?? (_refreshCommand = new RelayCommand(o => LoadCategories())); }
+        }
+
+
+
 
         public BahtiarViewModel()
         {
@@ -31,6 +40,8 @@ namespace Bahtiar.ViewModel
 
         public void LoadCategories()
         {
+            Categories.Clear();
+            //var data = GetData("http://bahtiyar.savgroup.ru/engine/modules/catalog/soft/data.php?api_info=take_vendors_by_hash&hash=6d6fa635612d7613c73229488bc022b7");
             var data = GetData(string.Format(Constants.UriGetCategories, "all"));
             if (string.IsNullOrEmpty(data))
                 return;

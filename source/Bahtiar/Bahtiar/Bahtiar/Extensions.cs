@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Text;
 
 namespace Bahtiar
@@ -17,6 +18,21 @@ namespace Bahtiar
             where TOutput : class
         {
             return input == null ? failureValue : evaluator(input);
+        }
+
+        public static TInput If<TInput>(this TInput input, Func<TInput, bool> evaluator)
+            where TInput : class
+        {
+            if (input == null) return null;
+            return evaluator(input) ? input : null;
+        }
+
+        public static void Do<TInput>(this TInput input, Action action)
+            where TInput : class
+        {
+            if (input == null)
+                return;
+            action();
         }
     }
 }

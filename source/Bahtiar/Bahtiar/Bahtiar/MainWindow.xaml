@@ -18,21 +18,31 @@
         </DataTemplate>
     </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ListBox ItemsSource="{Binding Categories}" 
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Refresh" Command="{Binding RefreshCommmand}"/>
+        </StackPanel>
+        <ListBox Grid.Row="1" 
+                 ItemsSource="{Binding Categories}" 
                  SelectedItem="{Binding CurrentCategory}"
                  ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
         
         <ListBox Grid.Column="1" 
+                 Grid.Row="1"
                  ItemsSource="{Binding CurrentCategory.Brands}"
                  SelectedItem="{Binding CurrentCategory.CurrentBrand}"
                  ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
         
         <ListBox Grid.Column="2"
+                 Grid.Row="1"
                  ItemsSource="{Binding CurrentCategory.CurrentBrand.Products}"
                  SelectedItem="{Binding CurrentCategory.CurrentBrand.CurrentProduct}"
                  ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
