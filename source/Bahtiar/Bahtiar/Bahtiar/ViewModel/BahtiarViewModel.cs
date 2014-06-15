@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Xml;
@@ -39,23 +38,23 @@ namespace Bahtiar.ViewModel
 
         public void LoadCategories()
         {
-            Categories.Clear();
             XmlNodeList nodes = null;
             var worker = new Worker(
-            (sender, args) =>
-            {
-                var data = GetData(string.Format(Constants.UriGetCategories, "all"));
-                if (string.IsNullOrEmpty(data))
-                    return;
-                var xml = XmlReader.Create(new StringReader(data));
-                var doc = new XmlDocument();
-                doc.Load(xml);
-                nodes = doc.SelectNodes("subsections/category");
-            },
+                (sender, args) =>
+                {
+                    var data = GetData(string.Format(Constants.UriGetCategories, "all"));
+                    if (string.IsNullOrEmpty(data))
+                        return;
+                    var xml = XmlReader.Create(new StringReader(data));
+                    var doc = new XmlDocument();
+                    doc.Load(xml);
+                    nodes = doc.SelectNodes("subsections/category");
+                },
             (sender, args) =>
             {
                 if (nodes == null) 
                     return;
+                Categories.Clear();
                 foreach (XmlNode node in nodes)
                     Categories.Add(new Category(node));
             });
@@ -81,6 +80,8 @@ namespace Bahtiar.ViewModel
                 try
                 {
                     res = wc.DownloadString(uri);
+                    if (res.Equals("0"))
+                        return null;
                     //.Replace("&lt;", "<").Replace("&gt;", ">").Replace("&quot;", "\"");
                 }
                 catch (Exception)

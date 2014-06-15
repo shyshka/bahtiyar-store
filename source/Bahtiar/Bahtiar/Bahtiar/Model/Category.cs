@@ -40,16 +40,36 @@ namespace Bahtiar.Model
 
         public void LoadBrands()
         {
-            var data = BahtiarViewModel.GetData(string.Format(Constants.UriGetBrands, Id));
-            if (string.IsNullOrEmpty(data))
-                return;
-            var xml = XmlReader.Create(new StringReader(data));
-            var doc = new XmlDocument();
-            doc.Load(xml);
-            var nodes = doc.SelectNodes("brands/brand");
-            if (nodes == null) return;
-            foreach (XmlNode node in nodes)
-                Brands.Add(new Brand(node, this));
+            XmlNodeList nodes = null;
+            var worker = new Worker(
+                (sender, args) =>
+                {
+                    var data = BahtiarViewModel.GetData(string.Format(Constants.UriGetBrands, Id));
+                    if (string.IsNullOrEmpty(data))
+                        return;
+                    var xml = XmlReader.Create(new StringReader(data));
+                    var doc = new XmlDocument();
+                    doc.Load(xml);
+                    nodes = doc.SelectNodes("brands/brand");
+                }, (sender, args) =>
+                {
+                    if (nodes == null) return;
+                    Brands.Clear();
+                    foreach (XmlNode node in nodes)
+                        Brands.Add(new Brand(node, this));
+                });
+            worker.RunWorkerAsync();
+
+            //var data = BahtiarViewModel.GetData(string.Format(Constants.UriGetBrands, Id));
+            //if (string.IsNullOrEmpty(data))
+            //    return;
+            //var xml = XmlReader.Create(new StringReader(data));
+            //var doc = new XmlDocument();
+            //doc.Load(xml);
+            //var nodes = doc.SelectNodes("brands/brand");
+            //if (nodes == null) return;
+            //foreach (XmlNode node in nodes)
+            //    Brands.Add(new Brand(node, this));
         }
     }
 }
