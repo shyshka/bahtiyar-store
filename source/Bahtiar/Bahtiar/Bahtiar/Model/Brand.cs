@@ -42,24 +42,34 @@ namespace Bahtiar.Model
         }
         public void LoadProducts()
         {
-            var data = BahtiarViewModel.GetData(string.Format(Constants.UriGetProducts, _category.Id, Id, 1, 0, 1000));
-            if (string.IsNullOrEmpty(data)) 
-                return;
-            var xml = XmlReader.Create(new StringReader(data));
-            var doc = new XmlDocument();
-            try
+            XmlNodeList nodes = null;
+            using (var worker = new Worker(
+                (sender, args) =>
+                {
+                    var data = BahtiarViewModel.GetData(string.Format(Constants.UriGetProducts, 
+                        _category.Id, Id, 1, 0, 1000));
+                    if (string.IsNullOrEmpty(data)) 
+                        return;
+                    var xml = XmlReader.Create(new StringReader(data));
+                    var doc = new XmlDocument();
+                    try
+                    {
+                        doc.Load(xml);
+                        nodes = doc.SelectNodes("goods_vendors/product");
+                    }
+                    catch
+                    { }
+                }, (sender, args) =>
+                {
+                    if (nodes == null) return;
+
+                    Products.Clear();
+                    foreach (XmlNode node in nodes)
+                        Products.Add(new Product(node));
+                }))
             {
-                doc.Load(xml);
-                var nodes = doc.SelectNodes("goods_vendors/product");
-                if (nodes == null) return;
-                foreach (XmlNode node in nodes)
-                    Products.Add(new Product(node));
+                worker.RunWorkerAsync();
             }
-            catch (Exception e)
-            {
-                //MessageBox.Show(e.Message);
-            }
-            
         }
     }
 }

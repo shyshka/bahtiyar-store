@@ -41,7 +41,7 @@ namespace Bahtiar.Model
         public void LoadBrands()
         {
             XmlNodeList nodes = null;
-            var worker = new Worker(
+            using (var worker = new Worker(
                 (sender, args) =>
                 {
                     var data = BahtiarViewModel.GetData(string.Format(Constants.UriGetBrands, Id));
@@ -57,19 +57,10 @@ namespace Bahtiar.Model
                     Brands.Clear();
                     foreach (XmlNode node in nodes)
                         Brands.Add(new Brand(node, this));
-                });
-            worker.RunWorkerAsync();
-
-            //var data = BahtiarViewModel.GetData(string.Format(Constants.UriGetBrands, Id));
-            //if (string.IsNullOrEmpty(data))
-            //    return;
-            //var xml = XmlReader.Create(new StringReader(data));
-            //var doc = new XmlDocument();
-            //doc.Load(xml);
-            //var nodes = doc.SelectNodes("brands/brand");
-            //if (nodes == null) return;
-            //foreach (XmlNode node in nodes)
-            //    Brands.Add(new Brand(node, this));
+                }))
+            {
+                worker.RunWorkerAsync();
+            }
         }
     }
 }

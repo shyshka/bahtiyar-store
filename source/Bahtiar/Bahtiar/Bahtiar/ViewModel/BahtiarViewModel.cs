@@ -39,7 +39,7 @@ namespace Bahtiar.ViewModel
         public void LoadCategories()
         {
             XmlNodeList nodes = null;
-            var worker = new Worker(
+            using (var worker = new Worker(
                 (sender, args) =>
                 {
                     var data = GetData(string.Format(Constants.UriGetCategories, "all"));
@@ -50,26 +50,17 @@ namespace Bahtiar.ViewModel
                     doc.Load(xml);
                     nodes = doc.SelectNodes("subsections/category");
                 },
-            (sender, args) =>
+                (sender, args) =>
+                {
+                    if (nodes == null)
+                        return;
+                    Categories.Clear();
+                    foreach (XmlNode node in nodes)
+                        Categories.Add(new Category(node));
+                }))
             {
-                if (nodes == null) 
-                    return;
-                Categories.Clear();
-                foreach (XmlNode node in nodes)
-                    Categories.Add(new Category(node));
-            });
-            worker.RunWorkerAsync();
-            
-            //var data = GetData(string.Format(Constants.UriGetCategories, "all"));
-            //if (string.IsNullOrEmpty(data))
-            //    return;
-            //var xml = XmlReader.Create(new StringReader(data));
-            //var doc = new XmlDocument();
-            //doc.Load(xml);
-            //var nodes = doc.SelectNodes("subsections/category");
-            //if (nodes == null) return;
-            //foreach (XmlNode node in nodes)
-            //    Categories.Add(new Category(node));
+                worker.RunWorkerAsync();
+            }
         }
 
         public static string GetData(string uri)
@@ -82,7 +73,6 @@ namespace Bahtiar.ViewModel
                     res = wc.DownloadString(uri);
                     if (res.Equals("0"))
                         return null;
-                    //.Replace("&lt;", "<").Replace("&gt;", ">").Replace("&quot;", "\"");
                 }
                 catch (Exception)
                 {
