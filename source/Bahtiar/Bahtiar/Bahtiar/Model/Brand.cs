@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
+using Bahtiar.Helper;
 using Bahtiar.ViewModel;
 
 namespace Bahtiar.Model

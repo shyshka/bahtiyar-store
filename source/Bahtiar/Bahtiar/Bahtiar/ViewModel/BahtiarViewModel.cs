@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Xml;
+using Bahtiar.Helper;
 using Bahtiar.Model;
 
 namespace Bahtiar.ViewModel
@@ -29,10 +31,7 @@ namespace Bahtiar.ViewModel
         {
             get { return _refreshCommand ?? (_refreshCommand = new RelayCommand(o => LoadCategories())); }
         }
-
-
-
-
+        
         public BahtiarViewModel()
         {
             Categories = new CategoryGroup();
@@ -41,17 +40,37 @@ namespace Bahtiar.ViewModel
         public void LoadCategories()
         {
             Categories.Clear();
-            //var data = GetData("http://bahtiyar.savgroup.ru/engine/modules/catalog/soft/data.php?api_info=take_vendors_by_hash&hash=6d6fa635612d7613c73229488bc022b7");
-            var data = GetData(string.Format(Constants.UriGetCategories, "all"));
-            if (string.IsNullOrEmpty(data))
-                return;
-            var xml = XmlReader.Create(new StringReader(data));
-            var doc = new XmlDocument();
-            doc.Load(xml);
-            var nodes = doc.SelectNodes("subsections/category");
-            if (nodes == null) return;
-            foreach (XmlNode node in nodes)
-                Categories.Add(new Category(node));
+            XmlNodeList nodes = null;
+            var worker = new Worker(
+            (sender, args) =>
+            {
+                var data = GetData(string.Format(Constants.UriGetCategories, "all"));
+                if (string.IsNullOrEmpty(data))
+                    return;
+                var xml = XmlReader.Create(new StringReader(data));
+                var doc = new XmlDocument();
+                doc.Load(xml);
+                nodes = doc.SelectNodes("subsections/category");
+            },
+            (sender, args) =>
+            {
+                if (nodes == null) 
+                    return;
+                foreach (XmlNode node in nodes)
+                    Categories.Add(new Category(node));
+            });
+            worker.RunWorkerAsync();
+            
+            //var data = GetData(string.Format(Constants.UriGetCategories, "all"));
+            //if (string.IsNullOrEmpty(data))
+            //    return;
+            //var xml = XmlReader.Create(new StringReader(data));
+            //var doc = new XmlDocument();
+            //doc.Load(xml);
+            //var nodes = doc.SelectNodes("subsections/category");
+            //if (nodes == null) return;
+            //foreach (XmlNode node in nodes)
+            //    Categories.Add(new Category(node));
         }
 
         public static string GetData(string uri)
@@ -61,7 +80,8 @@ namespace Bahtiar.ViewModel
             {
                 try
                 {
-                    res = wc.DownloadString(uri).Replace("&lt;", "<").Replace("&gt;", ">").Replace("&quot;", "\"");
+                    res = wc.DownloadString(uri);
+                    //.Replace("&lt;", "<").Replace("&gt;", ">").Replace("&quot;", "\"");
                 }
                 catch (Exception)
                 {
