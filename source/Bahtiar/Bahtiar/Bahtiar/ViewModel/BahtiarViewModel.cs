@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Xml;
 using Bahtiar.Model;
 
@@ -8,8 +9,6 @@ namespace Bahtiar.ViewModel
 {
     public class BahtiarViewModel : EntityBase
     {
-
-        private const string Uri = "http://bahtiyar.savgroup.ru/engine/modules/catalog/soft/data.php?api_info=take_subsections_by_ids&ids=all";
         public CategoryGroup Categories { get; private set; }
         private Category _currentCategory;
 
@@ -19,6 +18,8 @@ namespace Bahtiar.ViewModel
             set
             {
                 _currentCategory = value;
+                if (!_currentCategory.IsBrandsLoaded)
+                    _currentCategory.LoadBrands();
                 OnPropertyChanged();
             }
         }
@@ -28,29 +29,21 @@ namespace Bahtiar.ViewModel
             Categories = new CategoryGroup();
         }
 
-        public void LoadData()
+        public void LoadCategories()
         {
-            var data = GetData(Uri);
+            var data = GetData(string.Format(Constants.UriGetCategories, "all"));
             if (string.IsNullOrEmpty(data))
                 return;
             var xml = XmlReader.Create(new StringReader(data));
             var doc = new XmlDocument();
             doc.Load(xml);
             var nodes = doc.SelectNodes("subsections/category");
-            if (nodes == null)
-                return;
+            if (nodes == null) return;
             foreach (XmlNode node in nodes)
-            {
-                Categories.Add(new Category
-                {
-                    Id = int.Parse(node.SelectSingleNode("id").InnerText),
-                    Name = node.SelectSingleNode("name").InnerText
-                });
-            }
-
+                Categories.Add(new Category(node));
         }
 
-        private string GetData(string uri)
+        public static string GetData(string uri)
         {
             string res;
             using (var wc = new WebClient())

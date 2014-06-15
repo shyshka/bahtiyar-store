@@ -9,30 +9,32 @@
     <Window.DataContext>
         <viewModel:BahtiarViewModel x:Name="BahtiarViewModel"/>
     </Window.DataContext>
+    <Window.Resources>
+        <DataTemplate x:Key="ListBoxItemTemplate">
+            <StackPanel>
+                <TextBlock Foreground="DarkGray" Text="{Binding Id}"/>
+                <TextBlock Text="{Binding Name}" FontSize="16"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ListBox ItemsSource="{Binding Categories}" SelectedItem="{Binding CurrentCategory}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding Id}" Foreground="DarkGray"/>
-                        <TextBlock Text="{Binding Name}" FontSize="16"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <ContentControl Grid.Column="1" Content="{Binding CurrentCategory}">
-            <ContentControl.Template>
-                <ControlTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding Id}"/>
-                        <TextBlock Text="{Binding Name}"/>
-                    </StackPanel>
-                </ControlTemplate>
-            </ContentControl.Template>
-        </ContentControl>
+        <ListBox ItemsSource="{Binding Categories}" 
+                 SelectedItem="{Binding CurrentCategory}"
+                 ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
+        
+        <ListBox Grid.Column="1" 
+                 ItemsSource="{Binding CurrentCategory.Brands}"
+                 SelectedItem="{Binding CurrentCategory.CurrentBrand}"
+                 ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
+        
+        <ListBox Grid.Column="2"
+                 ItemsSource="{Binding CurrentCategory.CurrentBrand.Products}"
+                 SelectedItem="{Binding CurrentCategory.CurrentBrand.CurrentProduct}"
+                 ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
     </Grid>
 </Window>

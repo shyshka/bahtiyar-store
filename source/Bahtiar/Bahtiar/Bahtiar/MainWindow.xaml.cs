@@ -14,7 +14,7 @@ namespace Bahtiar
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            BahtiarViewModel.LoadData();
+            BahtiarViewModel.LoadCategories();
         }
     }
 }
