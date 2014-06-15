@@ -1,9 +1,8 @@
-﻿
-using System.Xml;
+﻿using System.Xml;
 
 namespace Bahtiar.Model
 {
-    public class Product : EntityBase
+    public class Product : NamedItemBase
     {
         private const string XmlGoodId = "good_id";
         private const string XmlName = "name";
@@ -71,36 +70,7 @@ namespace Bahtiar.Model
                 : 0;
         }
 
-
-        private int _id;
-
-        public int Id
-        {
-            get { return _id; }
-            set
-            {
-                if (_id == value)
-                    return;
-                _id = value;
-                OnPropertyChanged();
-            }
-        }
-        private string _name;
-
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                if (_name == value)
-                    return;
-                _name = value;
-                OnPropertyChanged();
-            }
-        }
-
         private int _weight;
-
         public int Weight
         {
             get { return _weight; }
@@ -114,7 +84,6 @@ namespace Bahtiar.Model
         }
 
         private double _price;
-
         public double Price
         {
             get { return _price; }
@@ -128,7 +97,6 @@ namespace Bahtiar.Model
         }
 
         private double _priceOld;
-
         public double PriceOld
         {
             get { return _priceOld; }
@@ -142,7 +110,6 @@ namespace Bahtiar.Model
         }
 
         private double _gift;
-
         public double Gift
         {
             get { return _gift; }
@@ -156,7 +123,6 @@ namespace Bahtiar.Model
         }
 
         private int _people;
-
         public int People
         {
             get { return _people; }
@@ -170,7 +136,6 @@ namespace Bahtiar.Model
         }
 
         private int _currencyId;
-
         public int CurrencyId
         {
             get { return _currencyId; }
@@ -184,7 +149,6 @@ namespace Bahtiar.Model
         }
 
         private string _description;
-
         public string Description
         {
             get { return _description; }
@@ -198,7 +162,6 @@ namespace Bahtiar.Model
         }
 
         private string _status;
-
         public string Status
         {
             get { return _status; }
@@ -212,7 +175,6 @@ namespace Bahtiar.Model
         }
 
         private double _delivery;
-
         public double Delivery
         {
             get { return _delivery; }
@@ -226,7 +188,6 @@ namespace Bahtiar.Model
         }
 
         private string _vendorArticul;
-
         public string VendorArticul
         {
             get { return _vendorArticul; }
@@ -240,7 +201,6 @@ namespace Bahtiar.Model
         }
 
         private int _cityId;
-
         public int CityId
         {
             get { return _cityId; }
@@ -254,7 +214,6 @@ namespace Bahtiar.Model
         }
 
         private string _goodUlr;
-
         public string GoodUlr
         {
             get { return _goodUlr; }
@@ -268,7 +227,6 @@ namespace Bahtiar.Model
         }
 
         private int _inAgrrement;
-
         public int InAgrrement
         {
             get { return _inAgrrement; }
@@ -282,7 +240,6 @@ namespace Bahtiar.Model
         }
 
         private int _arenda;
-
         public int Arenda
         {
             get { return _arenda; }

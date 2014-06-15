@@ -5,38 +5,12 @@ using Bahtiar.ViewModel;
 
 namespace Bahtiar.Model
 {
-    public class Brand : EntityBase
+    public class Brand : NamedItemBase
     {
         private const string XmlId = "id";
         private const string XmlName = "name";
 
         private readonly Category _category;
-
-        private int _id;
-        public int Id
-        {
-            get { return _id; }
-            set
-            {
-                if (_id == value)
-                    return;
-                _id = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _name;
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                if (_name == value)
-                    return;
-                _name = value;
-                OnPropertyChanged();
-            }
-        }
 
         public ProductGroup Products { get; private set; }
 

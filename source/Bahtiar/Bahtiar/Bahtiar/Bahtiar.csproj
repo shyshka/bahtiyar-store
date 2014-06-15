@@ -57,6 +57,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Model\Brand.cs" />
     <Compile Include="Model\BrandGroup.cs" />
+    <Compile Include="Model\NamedItemBase.cs" />
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\ProductGroup.cs" />
     <Compile Include="ViewModel\BahtiarViewModel.cs" />
