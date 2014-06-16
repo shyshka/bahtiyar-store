@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Windows;
 using System.Xml;
 using Bahtiar.Helper;
 using Bahtiar.Model;
@@ -25,12 +26,19 @@ namespace Bahtiar.ViewModel
         }
 
         private RelayCommand _refreshCommand;
-
         public RelayCommand RefreshCommmand
         {
             get { return _refreshCommand ?? (_refreshCommand = new RelayCommand(o => LoadCategories())); }
         }
-        
+
+        public bool IsNetworkEnabled
+        {
+            get 
+            { 
+                return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+            }
+        }
+
         public BahtiarViewModel()
         {
             Categories = new CategoryGroup();

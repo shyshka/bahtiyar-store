@@ -4,9 +4,10 @@
         xmlns:viewModel="clr-namespace:Bahtiar.ViewModel"
         xmlns:model="clr-namespace:Bahtiar.Model"
         Title="MainWindow" 
-        Height="350" 
-        Width="525"
-        Loaded="MainWindow_OnLoaded">
+        MinHeight="350" 
+        MinWidth="525"
+        Loaded="MainWindow_OnLoaded"
+        WindowState="Maximized">
     <Window.DataContext>
         <viewModel:BahtiarViewModel x:Name="BahtiarViewModel"/>
     </Window.DataContext>
@@ -17,36 +18,150 @@
                 <TextBlock Text="{Binding Name}" FontSize="16"/>
             </StackPanel>
         </DataTemplate>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="5,5,0,5"/>
+            <Setter Property="Padding" Value="2"/>
+        </Style>
+        <Style TargetType="{x:Type ToggleButton}">
+            <Setter Property="Margin" Value="5,5,0,5" />
+            <Setter Property="Padding" Value="2"/>
+        </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="80"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Button Content="Refresh" Command="{Binding RefreshCommmand}"/>
+            <Button Content="Настройки"/>
+            <ToggleButton Content="Подключить"/>
+            <Button Content="Обновить" 
+                    Command="{Binding RefreshCommmand}"/>
+            <Button Content="Показать мой прайс"/>
+            <Button Content="Отправить цены"/>
+            <Button Content="Спец предложения"/>
+            <Button Content="Новинки"/>
+            
         </StackPanel>
-        <ListBox Grid.Column="0" 
-                 Grid.Row="1" 
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="INFO BAR"
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="36"/>
+            <TextBlock Text="STATUS BAR"
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="36"/>
+            <Grid Grid.Row="1" 
+                  Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="70"/>
+                </Grid.ColumnDefinitions>
+                <TextBox MinWidth="200"
+                         
+                         HorizontalAlignment="Right"/>
+                <Button Grid.Column="1"
+                        Content="Искать"
+                        Style="{x:Null}"/>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition MaxWidth="350" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Text="Окно 1 (Картотека сервера)"
+                       FontSize="20"/>
+            <Grid Grid.Row="1" 
+                  Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ListBox Grid.Column="0" 
                  ItemsSource="{Binding Categories}" 
                  SelectedItem="{Binding CurrentCategory}"
                  ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
-        
-        <ListBox Grid.Column="1" 
-                 Grid.Row="1"
+
+                <ListBox Grid.Column="1" 
                  ItemsSource="{Binding CurrentCategory.Brands}"
                  SelectedItem="{Binding CurrentCategory.CurrentBrand}"
                  ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
-        
-        <ListBox Grid.Column="2"
-                 Grid.Row="1"
+
+                <ListBox Grid.Column="2"
                  ItemsSource="{Binding CurrentCategory.CurrentBrand.Products}"
                  SelectedItem="{Binding CurrentCategory.CurrentBrand.CurrentProduct}"
                  ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
+            </Grid>
+            <TextBlock Text="Окно 2 (Лоакальный прайс магазина)"
+                       Grid.Row="2"
+                       Grid.Column="0"
+                       FontSize="20"/>
+            <Grid Grid.Row="3" 
+                  Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ListBox Grid.Column="0" 
+                 ItemsSource="{Binding Categories}" 
+                 SelectedItem="{Binding CurrentCategory}"
+                 ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
+
+                <ListBox Grid.Column="1" 
+                 ItemsSource="{Binding CurrentCategory.Brands}"
+                 SelectedItem="{Binding CurrentCategory.CurrentBrand}"
+                 ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
+
+                <ListBox Grid.Column="2"
+                 ItemsSource="{Binding CurrentCategory.CurrentBrand.Products}"
+                 SelectedItem="{Binding CurrentCategory.CurrentBrand.CurrentProduct}"
+                 ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
+            </Grid>
+            <TextBlock Grid.Column="1"
+                       Grid.Row="0"
+                       Text="Новинки"
+                       FontSize="20"/>
+            <Grid Grid.Column="1"
+                  Grid.Row="1"/>
+            <TextBlock Grid.Column="1"
+                       Grid.Row="2"
+                       Text="Новинки"
+                       FontSize="20"/>
+            <Grid Grid.Column="1"
+                  Grid.Row="3"/>
+        </Grid>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="3">
+            <Button Content="Сохранить"/>
+            <Button Content="Сбросить"/>
+            <Button Content="Отправить"/>
+            <Button Content="Просмотреть"/>
+        </StackPanel>
     </Grid>
 </Window>
+
+    
