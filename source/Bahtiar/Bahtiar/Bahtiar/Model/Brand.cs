@@ -28,11 +28,11 @@ namespace Bahtiar.Model
             }
         }
 
-        public Brand(XmlNode node,Category category)
+        public Brand(XmlNode node, Category category)
         {
             _category = category;
-            Id = int.Parse(node.With(x=>x.SelectSingleNode(XmlId)).With(x=>x.InnerText));
-            Name = node.With(x=>x.SelectSingleNode(XmlName)).With(x=>x.InnerText);
+            Id = int.Parse(node.With(x => x.SelectSingleNode(XmlId)).With(x => x.InnerText));
+            Name = node.With(x => x.SelectSingleNode(XmlName)).With(x => x.InnerText);
             Products = new ProductGroup();
         }
 

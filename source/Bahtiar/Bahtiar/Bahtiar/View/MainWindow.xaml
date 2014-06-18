@@ -38,12 +38,12 @@
             <Button Content="Настройки"/>
             <ToggleButton Content="Подключить"/>
             <Button Content="Обновить" 
-                    Command="{Binding RefreshCommmand}"/>
+                    Command="{Binding RefreshCommand}"/>
             <Button Content="Показать мой прайс"/>
             <Button Content="Отправить цены"/>
             <Button Content="Спец предложения"/>
             <Button Content="Новинки"/>
-            
+
         </StackPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -115,7 +115,7 @@
                  SelectedItem="{Binding CurrentCategory.CurrentBrand.CurrentProduct}"
                  ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
             </Grid>
-            <TextBlock Text="Окно 2 (Лоакальный прайс магазина)"
+            <TextBlock Text="Окно 2 (Локальный прайс магазина)"
                        Grid.Row="2"
                        Grid.Column="0"
                        FontSize="20"/>

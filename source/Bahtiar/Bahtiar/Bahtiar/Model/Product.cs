@@ -5,7 +5,7 @@ namespace Bahtiar.Model
 {
     public class Product : NamedItemBase
     {
-        private const string XmlGoodId = "good_id";
+        private const string XmlId = "good_id";
         private const string XmlName = "name";
         private const string XmlWeight = "weight";
         private const string XmlPrice = "price";
@@ -27,7 +27,7 @@ namespace Bahtiar.Model
             double tmpValDec;
             int tmpValInt;
 
-            Id = int.TryParse(node.With(x => x.SelectSingleNode(XmlGoodId)).With(x => x.InnerText), out tmpValInt)
+            Id = int.TryParse(node.With(x => x.SelectSingleNode(XmlId)).With(x => x.InnerText), out tmpValInt)
                 ? tmpValInt
                 : 0;
             Name = node.With(x => x.SelectSingleNode(XmlName)).With(x => x.InnerText);

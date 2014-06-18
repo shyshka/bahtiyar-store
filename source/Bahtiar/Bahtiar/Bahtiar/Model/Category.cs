@@ -33,6 +33,35 @@ namespace Bahtiar.Model
             Name = node.With(x => x.SelectSingleNode(XmlName)).With(x => x.InnerText);
             Brands = new BrandGroup();
         }
+
+        //використовується у разі завантаження підключених категорій
+        public Category(int id)
+        {
+            XmlNode node = null;
+            using (var worker = new Worker(
+                (sender, args) =>
+                {
+                    var data = BahtiarViewModel.GetData(string.Format(Constants.UriGetCategories, id));
+                    if (string.IsNullOrEmpty(data))
+                        return;
+                    var xml = XmlReader.Create(new StringReader(data));
+                    var doc = new XmlDocument();
+                    doc.Load(xml);
+                    node = doc.SelectSingleNode("subsections/category");
+                },
+                (sender, args) =>
+                {
+                    if (node == null)
+                        return;
+                    Id = int.Parse(node.With(x => x.SelectSingleNode(XmlId)).With(x => x.InnerText));
+                    Name = node.With(x => x.SelectSingleNode(XmlName)).With(x => x.InnerText);
+                    Brands = new BrandGroup();
+                }))
+            {
+                worker.RunWorkerAsync();
+            }
+        }
+
         public bool IsBrandsLoaded
         {
             get { return Brands.Count != 0; }
