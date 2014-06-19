@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml;
 using Bahtiar.Helper;
 using Bahtiar.ViewModel;
 
 namespace Bahtiar.Model
 {
+    [Serializable]
     public class Category : NamedItemBase
     {
         private const string XmlId = "id";
@@ -34,7 +36,11 @@ namespace Bahtiar.Model
             Brands = new BrandGroup();
         }
 
-        //використовується у разі завантаження підключених категорій
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // то есть ты предлагаешь, создавать отдельный поток для загрузки каждой из групп? 
+        // там же был вроде АПИ для загрузки нескольких категорий?
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // використовується у разі завантаження підключених категорій
         public Category(int id)
         {
             XmlNode node = null;
@@ -60,6 +66,12 @@ namespace Bahtiar.Model
             {
                 worker.RunWorkerAsync();
             }
+        }
+
+        // конструктор для сериализации
+        protected Category()
+        {
+            Brands = new BrandGroup();
         }
 
         public bool IsBrandsLoaded

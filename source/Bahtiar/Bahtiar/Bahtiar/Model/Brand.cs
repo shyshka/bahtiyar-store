@@ -6,12 +6,13 @@ using Bahtiar.ViewModel;
 
 namespace Bahtiar.Model
 {
+    [Serializable]
     public class Brand : NamedItemBase
     {
         private const string XmlId = "id";
         private const string XmlName = "name";
 
-        private readonly Category _category;
+        public Category Category { get; set; }
 
         public ProductGroup Products { get; private set; }
 
@@ -30,9 +31,15 @@ namespace Bahtiar.Model
 
         public Brand(XmlNode node, Category category)
         {
-            _category = category;
+            Category = category;
             Id = int.Parse(node.With(x => x.SelectSingleNode(XmlId)).With(x => x.InnerText));
             Name = node.With(x => x.SelectSingleNode(XmlName)).With(x => x.InnerText);
+            Products = new ProductGroup();
+        }
+
+        // конструктор для сериализации
+        protected Brand()
+        {
             Products = new ProductGroup();
         }
 
@@ -47,7 +54,7 @@ namespace Bahtiar.Model
                 (sender, args) =>
                 {
                     var data = BahtiarViewModel.GetData(string.Format(Constants.UriGetProducts, 
-                        _category.Id, Id, 1, 0, 1000));
+                        Category.Id, Id, 1, 0, 1000));
                     if (string.IsNullOrEmpty(data)) 
                         return;
                     var xml = XmlReader.Create(new StringReader(data));

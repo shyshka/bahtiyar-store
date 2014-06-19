@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 
 namespace Bahtiar.View
 {
@@ -12,6 +13,11 @@ namespace Bahtiar.View
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             BahtiarViewModel.LoadCategories();
+        }
+
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            BahtiarViewModel.SaveLocal();
         }
     }
 }

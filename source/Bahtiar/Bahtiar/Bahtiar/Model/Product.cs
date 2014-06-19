@@ -1,8 +1,10 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using Bahtiar.Helper;
 
 namespace Bahtiar.Model
 {
+    [Serializable]
     public class Product : NamedItemBase
     {
         private const string XmlId = "good_id";
@@ -69,6 +71,11 @@ namespace Bahtiar.Model
             Arenda = int.TryParse(node.With(x => x.SelectSingleNode(XmlArenda)).With(x => x.InnerText), out tmpValInt)
                 ? tmpValInt
                 : 0;
+        }
+
+        // конструктор для сериализации
+        protected Product()
+        {
         }
 
         private int _weight;

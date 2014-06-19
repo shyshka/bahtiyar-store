@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
 using System.Xml;
+using System.Xml.Serialization;
 using Bahtiar.Helper;
 using Bahtiar.Model;
 
@@ -10,6 +12,8 @@ namespace Bahtiar.ViewModel
 {
     public class BahtiarViewModel : EntityBase
     {
+        private DirectoryInfo _dataDirectory;
+        private string _tempName = "data.temp";
         private Seller _seller;
 
         public CategoryGroup Categories { get; private set; }
@@ -50,11 +54,21 @@ namespace Bahtiar.ViewModel
 
         public BahtiarViewModel()
         {
+            _dataDirectory = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data"));
+            if(!_dataDirectory.Exists)
+                _dataDirectory.Create();
+
             Categories = new CategoryGroup();
         }
 
         public void LoadCategories()
         {
+            if (!IsNetworkEnabled)
+            {
+                LoadLocal();
+            }
+
+
             XmlNodeList nodes = null;
             using (var worker = new Worker(
                 (sender, args) =>
@@ -129,6 +143,39 @@ namespace Bahtiar.ViewModel
                 }
             }
             return res;
+        }
+
+        public void SaveLocal()
+        {
+            var formatter = new BinaryFormatter();
+            var file = new FileInfo(Path.Combine(_dataDirectory.FullName, _tempName));
+            using (var fs = new FileStream(file.FullName, FileMode.Create))
+            {
+                formatter.Serialize(fs, Categories);
+            }
+            
+        }
+
+        public void LoadLocal()
+        {
+            var formatter = new BinaryFormatter();
+            var file = new FileInfo(Path.Combine(_dataDirectory.FullName, _tempName));
+
+            if (!file.Exists)
+            {
+                return;
+            }
+
+
+            using (var fs = new FileStream(file.FullName, FileMode.Open))
+            {
+                var temp = formatter.Deserialize(fs) as CategoryGroup;
+                if (temp == null) return;
+                foreach (var t in temp)
+                {
+                    Categories.Add(t);
+                }
+            }
         }
     }
 }

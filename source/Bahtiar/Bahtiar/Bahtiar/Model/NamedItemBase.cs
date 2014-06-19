@@ -1,6 +1,9 @@
 ﻿
+using System;
+
 namespace Bahtiar.Model
 {
+    [Serializable]
     public abstract class NamedItemBase : EntityBase
     {
         private int _id;
@@ -27,6 +30,12 @@ namespace Bahtiar.Model
                 _name = value;
                 OnPropertyChanged();
             }
+        }
+
+        // конструктор для сериализации
+        protected NamedItemBase()
+        {
+
         }
     }
 }
